@@ -61,11 +61,10 @@
                         const searchedCity = data.name;
                         const temp = data.main;
                         const weather = data.weather[0].description;
-                        const toCelsius = temp.temp - 273.15;
-                        const toCelsiusNumber = parseInt(toCelsius);
+                        const toCelsius = parseFloat(temp.temp) - 273.15;
 
                         cityName.innerText = searchedCity;
-                        temperature.innerText = toCelsiusNumber.toFixed(2);
+                        temperature.innerText = toCelsius.toFixed(2);
                         condition.innerText = weather;
 
                     })
