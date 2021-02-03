@@ -14,6 +14,16 @@
             background: url(images/bg-image.jpg) no-repeat;
             background-size: cover;
             height: 100vh;
+            font-family: monospace;
+        }
+        .container h1,h3{
+            color: rgb(49, 1, 1);
+            font-size: 50px;
+        }
+        .container2{
+           background-image: linear-gradient(170deg, rgb(189, 248, 189), rgb(118, 125, 255));
+           padding: 30px;
+           opacity: .7;
         }
     </style>
 </head>
@@ -22,20 +32,48 @@
     <div class="container">
         <form class="col-md-6 m-auto py-5">
             <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Enter a location for Weather ...">
+                <input id="searchCity" type="text" class="form-control" placeholder="Enter a location for Weather ...">
                 <div class="input-group-append">
-                    <button type="button" class="btn btn-danger">Search</button>
+                    <button id="search" type="button" class="btn btn-danger">Search</button>
                 </div>
             </div>
         </form>
-        <div class="weather-status text-white text-center">
+        <div class="container2 weather-status text-white text-center">
             <img src="https://openweathermap.org/img/wn/02d@2x.png" alt="">
-            <h1>Dhaka</h1>
-            <h3><span>38.06</span>&deg;C</h3>
-            <h1 class="lead">Clouds</h1>
+            <h1 id="cityName">City-Name</h1>
+            <h3><span id="temperature">Temperature</span>&deg;C</h3>
+            <h1 id="condition" class="lead">Weather</h1>
         </div>
     </div>
 
+    <script>
+        function getWeather() {
+            const search = document.getElementById("search");
+            search.addEventListener("click", () => {
+                const searchCity = document.getElementById("searchCity");
+                const cityName = document.getElementById("cityName");
+                const temperature = document.getElementById("temperature");
+                const condition = document.getElementById("condition");
+
+                fetch('https://api.openweathermap.org/data/2.5/weather?q='+searchCity.value+'&appid=d2c77f6dc66cca43bbf9d21263215fc8')
+                    .then(response => response.json())
+                    .then(data => {
+                        const searchedCity = data.name;
+                        const temp = data.main;
+                        const weather = data.weather[0].description;
+                        const toCelsius = temp.temp - 273.15;
+                        const toCelsiusNumber = parseInt(toCelsius);
+
+                        cityName.innerText = searchedCity;
+                        temperature.innerText = toCelsiusNumber.toFixed(2);
+                        condition.innerText = weather;
+
+                    })
+                    .catch(err => alert("Enter A Valid City Name"));
+            })
+        }
+        getWeather();
+    </script>
 </body>
 
 </html>
